@@ -1,27 +1,32 @@
 import numpy as np
 import os
+import cv2
+
+TF_AVAILABLE = False
 
 try:
     import tensorflow as tf
     from tensorflow.keras.models import load_model
+    from tensorflow.keras.applications.efficientnet import preprocess_input
     TF_AVAILABLE = True
 except:
     TF_AVAILABLE = False
-from tensorflow.keras.applications.efficientnet import preprocess_input
-import cv2
+
+# Dummy preprocess if TF not available
+if not TF_AVAILABLE:
+    def preprocess_input(x):
+        return x
 
 model = None
 
+# Load model only if available
 if TF_AVAILABLE and os.path.exists("best_model.h5"):
     model = load_model("best_model.h5")
 
-
-
-model = load_model("best_model.h5")
 classes = ["First Degree", "Second Degree", "Third Degree"]
 
+
 def predict_burn(image):
-    # If model not available
     if model is None:
         return "⚠️ Model not available", 0.0
 
