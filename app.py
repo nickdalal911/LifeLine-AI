@@ -39,6 +39,11 @@ with col_right:
             st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
             st.rerun()
 
+
+if cv2 is None:
+    st.warning("⚠️ OpenCV not loaded. Some features may not work.")
+
+
 # ── THEME VARIABLES
 if st.session_state.theme == "dark":
     BG          = "#07070f"
