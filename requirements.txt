@@ -3,6 +3,4 @@ numpy==1.26.4
 opencv-python-headless
 Pillow
 google-generativeai
-openai==1.30.5
-
-# rebuild trigger
+openai==0.28.1
