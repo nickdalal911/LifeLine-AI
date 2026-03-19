@@ -26,3 +26,5 @@ def get_chatbot_response(prompt):
 
     except Exception as e:
         return f"⚠️ Error: {str(e)}"
+
+print("API KEY:", openai.api_key)
