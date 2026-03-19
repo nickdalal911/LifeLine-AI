@@ -3,5 +3,4 @@ numpy==1.26.4
 opencv-python-headless
 Pillow
 google-generativeai
-openai
-
+openai == 1.30.5
