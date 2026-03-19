@@ -1,16 +1,15 @@
 import os
 
-# Safe import
 try:
     from openai import OpenAI
     OPENAI_AVAILABLE = True
 except:
     OPENAI_AVAILABLE = False
 
-# Get API key safely
+# Get API key
 api_key = os.getenv("OPENAI_API_KEY")
 
-# Try Streamlit secrets if not found
+# Streamlit secrets fallback
 if not api_key:
     try:
         import streamlit as st
@@ -18,7 +17,7 @@ if not api_key:
     except:
         api_key = None
 
-# Initialize client safely
+# Safe client
 if OPENAI_AVAILABLE and api_key:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
@@ -27,14 +26,16 @@ if OPENAI_AVAILABLE and api_key:
 else:
     client = None
 
+
 SYSTEM_PROMPT = """You are LifeLine Assistant, a helpful AI medical assistant.
 Give short, clear first aid advice for burns.
 Recommend emergency help for severe burns.
 """
 
+
 def get_chatbot_response(user_message: str) -> str:
-    if not OPENAI_AVAILABLE or client is None:
-        return "⚠️ Chatbot not available"
+    if client is None:
+        return "⚠️ Chatbot not available (API key missing)"
 
     try:
         response = client.chat.completions.create(
