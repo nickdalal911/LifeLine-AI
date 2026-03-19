@@ -1,16 +1,8 @@
 import streamlit as st
-try:
-    import cv2
-except:
-    cv2 = None
 import numpy as np
 from predict import predict_burn
 from chatbot import get_chatbot_response
-
-
-
-
-st.warning("⚠️ Model disabled (TensorFlow not available in deployment)")
+from PIL import Image
 
 
 
@@ -46,8 +38,7 @@ with col_right:
             st.rerun()
 
 
-if cv2 is None:
-    st.warning("⚠️ OpenCV not loaded. Some features may not work.")
+
 
 
 # ── THEME VARIABLES
@@ -212,8 +203,8 @@ label = None
 uploaded_file = st.file_uploader("", type=["jpg","png","jpeg"], label_visibility="collapsed")
 
 if uploaded_file is not None:
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image = cv2.imdecode(file_bytes, 1)
+    image = Image.open(uploaded_file)
+    image = np.array(image)
     col_img, _ = st.columns([2,1])
     with col_img:
         st.image(image, caption="Uploaded Image", use_column_width=True)
