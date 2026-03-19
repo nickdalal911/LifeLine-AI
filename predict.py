@@ -1,6 +1,9 @@
 import numpy as np
 import os
-import cv2
+try:
+    import cv2
+except:
+    cv2 = None
 
 TF_AVAILABLE = False
 
@@ -27,8 +30,8 @@ classes = ["First Degree", "Second Degree", "Third Degree"]
 
 
 def predict_burn(image):
-    if model is None:
-        return "⚠️ Model not available", 0.0
+    if model is None or cv2 is None:
+        return "⚠️ Model/OpenCV not available", 0.0
 
     try:
         img = cv2.resize(image, (224, 224))
