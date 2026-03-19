@@ -8,6 +8,12 @@ from predict import predict_burn
 from chatbot import get_chatbot_response
 
 
+
+
+st.warning("⚠️ Model disabled (TensorFlow not available in deployment)")
+
+
+
 st.set_page_config(page_title="LifeLine AI", page_icon="🔥", layout="centered", initial_sidebar_state="collapsed")
 
 # ── THEME STATE
