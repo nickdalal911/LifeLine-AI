@@ -1,5 +1,6 @@
 import os
 
+# Safe import
 try:
     from openai import OpenAI
     OPENAI_AVAILABLE = True
@@ -17,11 +18,15 @@ if not api_key:
     except:
         api_key = None
 
-# Safe client
+# Safe client (FIXED for OpenRouter)
 if OPENAI_AVAILABLE and api_key:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=api_key
+        api_key=api_key,
+        default_headers={
+            "HTTP-Referer": "https://lifeline-ai.streamlit.app",  # can be anything
+            "X-Title": "LifeLine AI"
+        }
     )
 else:
     client = None
@@ -35,7 +40,7 @@ Recommend emergency help for severe burns.
 
 def get_chatbot_response(user_message: str) -> str:
     if client is None:
-        return "⚠️ Chatbot not available (API key missing)"
+        return "⚠️ Chatbot not available (API key missing or OpenAI not installed)"
 
     try:
         response = client.chat.completions.create(
@@ -49,4 +54,4 @@ def get_chatbot_response(user_message: str) -> str:
         return response.choices[0].message.content
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"API Error: {str(e)}"
