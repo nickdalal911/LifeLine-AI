@@ -1,5 +1,8 @@
 import streamlit as st
-import cv2
+try:
+    import cv2
+except:
+    cv2 = None
 import numpy as np
 from predict import predict_burn
 from chatbot import get_chatbot_response
