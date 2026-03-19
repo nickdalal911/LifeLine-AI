@@ -1,20 +1,31 @@
-from openai import OpenAI
 import os
-import streamlit as st
-from dotenv import load_dotenv
 
-load_dotenv()
+# Safe import
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except:
+    OPENAI_AVAILABLE = False
 
-api_key = os.getenv("API_KEY")
+# Get API key safely
+api_key = os.getenv("OPENAI_API_KEY")
 
-# fallback for deployment
+# Try Streamlit secrets if not found
 if not api_key:
-    api_key = st.secrets["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"]
+    try:
+        import streamlit as st
+        api_key = st.secrets["OPENAI_API_KEY"]
+    except:
+        api_key = None
 
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=api_key
-)
+# Initialize client safely
+if OPENAI_AVAILABLE and api_key:
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=api_key
+    )
+else:
+    client = None
 
 SYSTEM_PROMPT = """You are LifeLine Assistant, a helpful AI medical assistant.
 Give short, clear first aid advice for burns.
@@ -22,9 +33,12 @@ Recommend emergency help for severe burns.
 """
 
 def get_chatbot_response(user_message: str) -> str:
+    if not OPENAI_AVAILABLE or client is None:
+        return "⚠️ Chatbot not available"
+
     try:
         response = client.chat.completions.create(
-            model="meta-llama/llama-3-8b-instruct",  # ✅ FIXED MODEL
+            model="meta-llama/llama-3-8b-instruct",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
