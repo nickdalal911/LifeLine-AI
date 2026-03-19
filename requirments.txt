@@ -1,11 +1,6 @@
-streamlit==1.32.0
-tensorflow==2.15.0
-opencv-python-headless==4.9.0.80
-numpy==1.26.4
-google-genai
 streamlit
-tensorflow
-keras
-numpy
-opencv-python
+tensorflow==2.15.0
+numpy==1.26.4
+opencv-python-headless
 Pillow
+google-generativeai
